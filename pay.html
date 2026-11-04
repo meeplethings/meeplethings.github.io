@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Meeple Things | Upload Payment Receipt</title>
+<style>
+  html,body{height:100%;margin:0;background:#FAF9F5;font-family:Arial,sans-serif;color:#34343A}
+  #wrap{display:flex;flex-direction:column;height:100%}
+  iframe{flex:1;width:100%;border:0;background:#FAF9F5}
+  #foot{padding:8px 12px;font-size:12px;text-align:center;color:#5d6a70;background:#fff;border-top:1px solid #DCEBED}
+  #foot a{color:#145565}
+  #err{padding:24px;text-align:center}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <iframe id="f" title="Upload payment receipt" allow="camera"></iframe>
+  <div id="foot">Form not loading? <a id="alt" href="#" target="_blank" rel="noopener">Open it in a new tab</a></div>
+</div>
+<script>
+(function(){
+  var q=new URLSearchParams(location.search);
+  var s=q.get('s')||'', id=q.get('id')||'', pt=q.get('pt')||'';
+  if(!/^[A-Za-z0-9_-]{20,}$/.test(s)){
+    document.getElementById('wrap').innerHTML='<div id="err">This payment link is not valid. Please contact Meeple Things.</div>';
+    return;
+  }
+  var url='https://script.google.com/macros/s/'+s+'/exec?action=pay&id='+encodeURIComponent(id)+'&pt='+encodeURIComponent(pt);
+  // The form is loaded INSIDE this page, so the phone never sees a script.google.com link to hand to the Drive app.
+  document.getElementById('f').src=url;
+  document.getElementById('alt').href=url;
+})();
+</script>
+</body>
+</html>
